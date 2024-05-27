@@ -1,6 +1,6 @@
 const inquirer = require("inquirer")
-const { printTable } = require("console-table-printer")
-const mysql2 = require("mysql2")
+const { printTable } = require("console-table-printer");
+const mysql2 = require("mysql2");
 //information needed to connect to the db
 const db = mysql2.createConnection({
     host:"localhost",
