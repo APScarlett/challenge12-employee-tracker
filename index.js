@@ -35,5 +35,85 @@ function menu() {
         else if(response.option === "add an employee"){
             addEmployee()
         }
+        else if (response.option === "update an employee role"){
+            updateEmployee()
+        }
+        else if(response.option === "view all departments"){
+            viewAllDepartments()
+        }
+        else if (response.option === "add a department") {
+            addDepartment()
+        }
+        else{
+            addRole()
+        }
+    })
+}
+//function to update employee titles
+function updateEmployee() {
+    db.query(`SELECT id as value, title as name from role`, (err, roleData)=>{
+        db.query(`SELECT id as value, CONCAT(first_name,'', last_name) as name from employee`,(err, employeeData)=>{
+            inquirer.prompt([
+                
+        
+        
+            {
+                type:"list",
+                message:"What is new title for the employee?",
+                name: "role_id",
+                choices: roleData
+            },
+            {
+                type:"list",
+                message:"Which employee do you want to update his or her new title?",
+                name: "employee_id",
+                choices: employeeData
+            }
+        ])
+        .then(response =>{
+
+            db.query(`UPDATE employee SET role_id=${response.role_id} WHERE id=${response.employee_id} `, (err) => {
+
+                viewAllEmployees()
+            })
+        })
+    })
+})
+}
+//function that adds employees
+function addEmployee(){
+    db.query(`SELECT id as value, title as name from role`, (err, roleData)  => {
+
+        db.query(`Select id as value, CONCAT(first_name, '', last_name) as name from employee where manager_id is null`, (err, managerData) =>{
+            inquirer.prompt([{
+                type:"input",
+                message:"What is your first name?",
+                name:"first_name"
+            },
+            {
+                type:"input",
+                message:"What is your last name?",
+                name:"last_name"
+            },
+            {
+                type:"list",
+                message:"what is your title?",
+                name:"title",
+                choices: roleData
+            },
+            {
+                type:"list",
+                message:"Who is your manager?",
+                name:"manager_id",
+                choices: managerData
+            }
+            ])
+            .then(response => {
+                db.query(`insert into employee(first_name,last_name,role_id, manager_id)values ("${response.first_name}","${response.last_name}","${response.title}","${response.manager_id}")`, (err) => {
+
+                    viewAllEmployees()
+                })
+            })
+        })
     })
 }
