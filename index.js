@@ -136,10 +136,73 @@ function viewAllEmployees() {
 }
 
 function viewAllDepartments(){
-    db.query(`SELECT * FROM department;`,
-        (err, data) => {
+    db.query(`SELECT * FROM department;`,(err, data) => {
          
             printTable(data)
             menu()
         })
+}
+
+function addDepartment() {
+
+    db.query(`SELECT * FROM department`, (err, roleData) => 
+            {
+            inquirer.prompt([{
+                type: "input",
+                message: "Name of new department",
+                name: "department"
+            }
+            ])
+            .then(response => {
+
+
+
+                db.query(`INSERT INTO department(name)
+                VALUES ("${response.department}")`, (err) => {
+
+                    viewAllDepartments() 
+                })
+
+            })
+
+        })
+           
+    
+}
+
+function addRole() {
+
+    db.query(`SELECT tile from role`, (err, roleData) => 
+            {
+            inquirer.prompt([{
+                type: "input",
+                message: "Name of new role",
+                name: "title"
+            },
+            {
+                type: "input",
+                message: "Please input department ID ",
+                name: "department_id",
+               
+            },
+            {
+                type: "input",
+                message: "Salary amount",
+                name: "salary"
+            }
+            ])
+            .then(response => {
+
+
+
+                db.query(`INSERT INTO role(title, department_id, salary)VALUES ("${response.title}","${response.department_id}","${response.salary}")`, (err) => {
+
+                    viewAllRoles() 
+                })
+
+            })
+
+        })
+           
+    
 }
