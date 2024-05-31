@@ -118,6 +118,20 @@ function addEmployee(){
     })
 }
 
+
+
+
+
+function viewAllRoles(){
+    db.query(`SELECT role.id as id, title, name as department, salary
+    FROM role
+    LEFT JOIN department
+    ON role.department_id=department.id;`, (err,data) =>{
+        printTable(data)
+        menu()
+    })
+}
+
 //view all employee function
 function viewAllEmployees() {
     db.query(`SELECT employee.id as id, employee.first_name, employee.last_name, title, 
