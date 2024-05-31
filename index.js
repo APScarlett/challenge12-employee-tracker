@@ -11,7 +11,7 @@ const db = mysql2.createConnection({
 })
 
 db.connect(()=>{
-    menubar()
+    menu()
 })
 //viw all departments, all roles, all employees, adds a department, a role, an employee and update an employee role
 function menu() {
@@ -133,4 +133,13 @@ function viewAllEmployees() {
         printTable(data)
         menu()
     })
+}
+
+function viewAllDepartments(){
+    db.query(`SELECT * FROM department;`,
+        (err, data) => {
+         
+            printTable(data)
+            menu()
+        })
 }
